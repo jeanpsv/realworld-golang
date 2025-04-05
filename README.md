@@ -19,5 +19,20 @@ For more information on how to this works with other frontends/backends, head ov
 
 # Getting started
 
-> npm install, npm start, etc.
+### Running development environment
+
+```bash
+make up  # to start development environment
+```
+
+```bash
+make down # to stop development environment
+```
+
+or just
+
+```bash
+docker-compose up -d # to start development environment
+docker-compose down # to stop development environment
+```
 
