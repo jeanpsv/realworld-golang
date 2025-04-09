@@ -11,6 +11,7 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/jeanpsv/realworld-golang/data"
 )
 
 const version = "1.0.0"
@@ -26,6 +27,7 @@ type config struct {
 type application struct {
 	config config
 	logger *slog.Logger
+	models data.Models
 }
 
 func main() {
@@ -49,6 +51,7 @@ func main() {
 	app := &application{
 		config: config,
 		logger: logger,
+		models: data.NewModels(db),
 	}
 
 	server := &http.Server{
