@@ -12,30 +12,17 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jeanpsv/realworld-golang/internal/data"
+	"github.com/jeanpsv/realworld-golang/internal/router"
 )
 
 const version = "1.0.0"
 
-type config struct {
-	port int
-	env  string
-	db   struct {
-		dsn string
-	}
-}
-
-type application struct {
-	config config
-	logger *slog.Logger
-	models data.Models
-}
-
 func main() {
-	var config config
+	var config router.HttpConfig
 
-	flag.IntVar(&config.port, "port", 4000, "API Server Port")
-	flag.StringVar(&config.env, "env", "development", "Environment (development|staging|production)")
-	flag.StringVar(&config.db.dsn, "db-dsn", "realworld:realworld@/realworld_dev?parseTime=true", "MySQL DSN")
+	flag.IntVar(&config.Port, "port", 4000, "API Server Port")
+	flag.StringVar(&config.Env, "env", "development", "Environment (development|staging|production)")
+	flag.StringVar(&config.Db.Dsn, "db-dsn", "realworld:realworld@/realworld_dev?parseTime=true", "MySQL DSN")
 	flag.Parse()
 
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
@@ -48,29 +35,29 @@ func main() {
 	defer db.Close()
 	logger.Info("database connection pool established")
 
-	app := &application{
-		config: config,
-		logger: logger,
-		models: data.NewModels(db),
+	app := &router.HttpApplication{
+		Config: config,
+		Logger: logger,
+		Models: data.NewModels(db),
 	}
 
 	server := &http.Server{
-		Addr:         fmt.Sprintf(":%d", config.port),
-		Handler:      app.routes(),
+		Addr:         fmt.Sprintf(":%d", config.Port),
+		Handler:      app.Routes(),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  5 * time.Minute,
 		WriteTimeout: 10 * time.Minute,
 		ErrorLog:     slog.NewLogLogger(logger.Handler(), slog.LevelError),
 	}
-	logger.Info("starting server", "addr", server.Addr, "env", config.env)
+	logger.Info("starting server", "addr", server.Addr, "env", config.Env)
 
 	err = server.ListenAndServe()
 	logger.Error(err.Error())
 	os.Exit(1)
 }
 
-func openDB(config config) (*sql.DB, error) {
-	db, err := sql.Open("mysql", config.db.dsn)
+func openDB(config router.HttpConfig) (*sql.DB, error) {
+	db, err := sql.Open("mysql", config.Db.Dsn)
 	if err != nil {
 		return nil, err
 	}

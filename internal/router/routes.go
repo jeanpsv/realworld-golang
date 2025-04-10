@@ -1,4 +1,4 @@
-package main
+package router
 
 import (
 	"net/http"
@@ -6,7 +6,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func (app *application) routes() http.Handler {
+func (app *HttpApplication) Routes() http.Handler {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/v1/healthcheck", app.healthcheckHandler).Methods("GET")
