@@ -3,8 +3,8 @@ package data
 import (
 	"database/sql"
 
-	"github.com/jeanpsv/realworld-golang/data/tag"
-	"github.com/jeanpsv/realworld-golang/data/tag/mysql"
+	"github.com/jeanpsv/realworld-golang/internal/data/tag"
+	"github.com/jeanpsv/realworld-golang/internal/data/tag/mysql"
 )
 
 type Models struct {

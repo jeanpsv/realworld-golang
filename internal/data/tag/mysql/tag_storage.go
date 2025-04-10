@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"time"
 
-	"github.com/jeanpsv/realworld-golang/data/tag"
+	"github.com/jeanpsv/realworld-golang/internal/data/tag"
 )
 
 type DB struct {

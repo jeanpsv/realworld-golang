@@ -11,7 +11,7 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/jeanpsv/realworld-golang/data"
+	"github.com/jeanpsv/realworld-golang/internal/data"
 )
 
 const version = "1.0.0"
