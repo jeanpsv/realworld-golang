@@ -4,20 +4,20 @@ up:
 down:
 	docker-compose down
 
-run-api:
+run/api:
 	go run ./cmd/api
 
-migration-create:
+migration/create:
 	migrate create -ext=.sql -dir=./data/migrations ${migration_name}
 
-migration-up:
+migration/up:
 	migrate -path=./data/migrations -database=mysql://realworld:realworld@/realworld_dev up
 
-migration-down-one:
+migration/down-one:
 	migrate -path=./data/migrations -database=mysql://realworld:realworld@/realworld_dev down 1
 
-migration-down:
+migration/down:
 	migrate -path=./data/migrations -database=mysql://realworld:realworld@/realworld_dev down
 
-migration-force:
+migration/force:
 	migrate -path=./data/migrations -database=mysql://realworld:realworld@/realworld_dev force ${version}
