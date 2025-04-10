@@ -17,20 +17,20 @@ run/api:
 
 ## db/migration/create migration_name=$1: create a new database migration 
 db/migration/create:
-	migrate create -ext=.sql -dir=./data/migrations ${migration_name}
+	migrate create -ext=.sql -dir=./migrations ${migration_name}
 
 ## db/migration/up: apply all up database migrations
 db/migration/up:
-	migrate -path=./data/migrations -database=mysql://realworld:realworld@/realworld_dev up
+	migrate -path=./migrations -database=mysql://realworld:realworld@/realworld_dev up
 
 ## db/migration/down-one: apply one down database migration
 db/migration/down-one:
-	migrate -path=./data/migrations -database=mysql://realworld:realworld@/realworld_dev down 1
+	migrate -path=./migrations -database=mysql://realworld:realworld@/realworld_dev down 1
 
 ## db/migration/down: apply all down database migrations
 db/migration/down:
-	migrate -path=./data/migrations -database=mysql://realworld:realworld@/realworld_dev down
+	migrate -path=./migrations -database=mysql://realworld:realworld@/realworld_dev down
 
 ## db/migration/force version=$1: force specific migration version
 db/migration/force:
-	migrate -path=./data/migrations -database=mysql://realworld:realworld@/realworld_dev force ${version}
+	migrate -path=./migrations -database=mysql://realworld:realworld@/realworld_dev force ${version}
