@@ -15,8 +15,6 @@ import (
 	"github.com/jeanpsv/realworld-golang/internal/router"
 )
 
-const version = "1.0.0"
-
 func main() {
 	var config router.HttpConfig
 
