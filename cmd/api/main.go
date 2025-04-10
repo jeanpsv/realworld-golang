@@ -3,59 +3,50 @@ package main
 import (
 	"context"
 	"database/sql"
-	"flag"
-	"fmt"
-	"log/slog"
+	"log"
 	"net/http"
-	"os"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/jeanpsv/realworld-golang/internal/data"
-	"github.com/jeanpsv/realworld-golang/internal/router"
+	"github.com/gorilla/mux"
+	"github.com/jeanpsv/realworld-golang/internal/repository/db"
+	"github.com/jeanpsv/realworld-golang/internal/rest"
+	"github.com/jeanpsv/realworld-golang/tag"
 )
 
 func main() {
-	var config router.HttpConfig
 
-	flag.IntVar(&config.Port, "port", 4000, "API Server Port")
-	flag.StringVar(&config.Env, "env", "development", "Environment (development|staging|production)")
-	flag.StringVar(&config.Db.Dsn, "db-dsn", "realworld:realworld@/realworld_dev?parseTime=true", "MySQL DSN")
-	flag.Parse()
-
-	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
-
-	db, err := openDB(config)
+	dbConn, err := openDB("realworld:realworld@/realworld_dev?parseTime=true")
 	if err != nil {
-		logger.Error(err.Error())
-		os.Exit(1)
+		log.Fatal("failed to open connection to database", err)
 	}
-	defer db.Close()
-	logger.Info("database connection pool established")
 
-	app := &router.HttpApplication{
-		Config: config,
-		Logger: logger,
-		Models: data.NewModels(db),
+	err = dbConn.Ping()
+	if err != nil {
+		log.Fatal("failed to ping database", err)
 	}
+
+	defer dbConn.Close()
+
+	tagRepo := db.NewTagRepository(dbConn)
+
+	tagService := tag.NewService(tagRepo)
+
+	router := mux.NewRouter()
+	rest.NewTagHandler(router, tagService)
 
 	server := &http.Server{
-		Addr:         fmt.Sprintf(":%d", config.Port),
-		Handler:      app.Routes(),
-		IdleTimeout:  time.Minute,
-		ReadTimeout:  5 * time.Minute,
-		WriteTimeout: 10 * time.Minute,
-		ErrorLog:     slog.NewLogLogger(logger.Handler(), slog.LevelError),
+		Handler:      router,
+		Addr:         "127.0.0.1:4000",
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
 	}
-	logger.Info("starting server", "addr", server.Addr, "env", config.Env)
 
-	err = server.ListenAndServe()
-	logger.Error(err.Error())
-	os.Exit(1)
+	log.Fatal(server.ListenAndServe())
 }
 
-func openDB(config router.HttpConfig) (*sql.DB, error) {
-	db, err := sql.Open("mysql", config.Db.Dsn)
+func openDB(dsn string) (*sql.DB, error) {
+	db, err := sql.Open("mysql", dsn)
 	if err != nil {
 		return nil, err
 	}

@@ -1,4 +1,4 @@
-package router
+package rest
 
 import (
 	"encoding/json"
@@ -7,7 +7,7 @@ import (
 
 type Envelope map[string]any
 
-func (app *HttpApplication) WriteJSON(w http.ResponseWriter, status int, data Envelope, headers http.Header) error {
+func WriteJSON(w http.ResponseWriter, status int, data Envelope, headers http.Header) error {
 	js, err := json.MarshalIndent(data, "", "\t")
 	if err != nil {
 		return err
