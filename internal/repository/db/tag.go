@@ -5,21 +5,21 @@ import (
 	"database/sql"
 	"time"
 
-	"github.com/jeanpsv/realworld-golang/domain"
-	"github.com/jeanpsv/realworld-golang/tag"
+	"github.com/jeanpsv/realworld-golang/models"
+	"github.com/jeanpsv/realworld-golang/services"
 )
 
 type TagRepository struct {
 	conn *sql.DB
 }
 
-func NewTagRepository(c *sql.DB) tag.Repository {
+func NewTagRepository(c *sql.DB) services.TagRepository {
 	return &TagRepository{
 		conn: c,
 	}
 }
 
-func (r *TagRepository) Select() ([]*domain.Tag, error) {
+func (r *TagRepository) Select() ([]*models.Tag, error) {
 	query := `
 		SELECT id, name, created_at, updated_at
 		FROM tags
@@ -36,10 +36,10 @@ func (r *TagRepository) Select() ([]*domain.Tag, error) {
 
 	defer rows.Close()
 
-	tags := []*domain.Tag{}
+	tags := []*models.Tag{}
 
 	for rows.Next() {
-		var tag domain.Tag
+		var tag models.Tag
 
 		err := rows.Scan(
 			&tag.ID,

@@ -4,14 +4,14 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/jeanpsv/realworld-golang/tag"
+	"github.com/jeanpsv/realworld-golang/services"
 )
 
 type TagHandler struct {
-	service tag.Service
+	service services.TagService
 }
 
-func NewTagHandler(router *mux.Router, s tag.Service) {
+func NewTagHandler(router *mux.Router, s services.TagService) {
 	handler := &TagHandler{
 		service: s,
 	}

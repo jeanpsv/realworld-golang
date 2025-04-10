@@ -11,7 +11,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jeanpsv/realworld-golang/internal/repository/db"
 	"github.com/jeanpsv/realworld-golang/internal/rest"
-	"github.com/jeanpsv/realworld-golang/tag"
+	"github.com/jeanpsv/realworld-golang/services"
 )
 
 func main() {
@@ -28,11 +28,10 @@ func main() {
 
 	defer dbConn.Close()
 
-	tagRepo := db.NewTagRepository(dbConn)
-
-	tagService := tag.NewService(tagRepo)
-
 	router := mux.NewRouter()
+
+	tagRepo := db.NewTagRepository(dbConn)
+	tagService := services.NewTagService(tagRepo)
 	rest.NewTagHandler(router, tagService)
 
 	server := &http.Server{
