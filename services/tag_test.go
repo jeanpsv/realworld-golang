@@ -1,13 +1,12 @@
-package services_test
+package services
 
 import (
 	"errors"
 	"testing"
 	"time"
 
+	"github.com/jeanpsv/realworld-golang/mocks"
 	"github.com/jeanpsv/realworld-golang/models"
-	"github.com/jeanpsv/realworld-golang/services"
-	"github.com/jeanpsv/realworld-golang/services/mocks"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -24,7 +23,7 @@ func TestSelectShouldReturnList(t *testing.T) {
 	mockedTagRepository := mocks.NewTagRepository(t)
 	mockedTagRepository.On("Select").Return(expectedTags, nil)
 
-	tagService := services.NewTagService(mockedTagRepository)
+	tagService := NewTagService(mockedTagRepository)
 	actualTags, err := tagService.List()
 	assert.Nil(t, err)
 
@@ -38,7 +37,7 @@ func TestSelectShouldReturnEmptyList(t *testing.T) {
 	mockedTagRepository := mocks.NewTagRepository(t)
 	mockedTagRepository.On("Select").Return([]*models.Tag{}, nil)
 
-	tagService := services.NewTagService(mockedTagRepository)
+	tagService := NewTagService(mockedTagRepository)
 	actualTags, err := tagService.List()
 	assert.Nil(t, err)
 	assert.Empty(t, actualTags)
@@ -49,7 +48,7 @@ func TestSelectShouldReturnError(t *testing.T) {
 	mockedTagRepository := mocks.NewTagRepository(t)
 	mockedTagRepository.On("Select").Return(nil, errors.New(expectedErrorMessage))
 
-	tagService := services.NewTagService(mockedTagRepository)
+	tagService := NewTagService(mockedTagRepository)
 	actualTags, err := tagService.List()
 
 	assert.Nil(t, actualTags)

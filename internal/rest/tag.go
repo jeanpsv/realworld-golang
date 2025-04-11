@@ -8,10 +8,10 @@ import (
 )
 
 type TagHandler struct {
-	tags services.TagService
+	tags services.TagUseCase
 }
 
-func NewTagHandler(router *mux.Router, tagService services.TagService) {
+func NewTagHandler(router *mux.Router, tagService services.TagUseCase) {
 	handler := &TagHandler{
 		tags: tagService,
 	}

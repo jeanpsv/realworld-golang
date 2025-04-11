@@ -6,12 +6,16 @@ type TagRepository interface {
 	Select() ([]*models.Tag, error)
 }
 
+type TagUseCase interface {
+	List() ([]*models.Tag, error)
+}
+
 type TagService struct {
 	tags TagRepository
 }
 
-func NewTagService(tagRepository TagRepository) TagService {
-	return TagService{
+func NewTagService(tagRepository TagRepository) TagUseCase {
+	return &TagService{
 		tags: tagRepository,
 	}
 }

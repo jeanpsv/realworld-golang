@@ -1,11 +1,10 @@
-package mysql_test
+package mysql
 
 import (
 	"errors"
 	"testing"
 	"time"
 
-	"github.com/jeanpsv/realworld-golang/internal/repository/mysql"
 	"github.com/jeanpsv/realworld-golang/models"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/DATA-DOG/go-sqlmock.v1"
@@ -38,7 +37,7 @@ func TestSelectShouldReturnList(t *testing.T) {
 	query := "SELECT id, name, created_at, updated_at FROM tags ORDER BY id"
 
 	mock.ExpectQuery(query).WillReturnRows(rows)
-	repo := mysql.NewTagRepository(db)
+	repo := NewTagRepository(db)
 	actualTags, err := repo.Select()
 
 	assert.Nil(t, err)
@@ -62,7 +61,7 @@ func TestSelectShouldReturnEmptyList(t *testing.T) {
 	query := "SELECT id, name, created_at, updated_at FROM tags ORDER BY id"
 
 	mock.ExpectQuery(query).WillReturnRows(rows)
-	repo := mysql.NewTagRepository(db)
+	repo := NewTagRepository(db)
 	actualTags, err := repo.Select()
 
 	assert.Nil(t, err)
@@ -81,7 +80,7 @@ func TestSelectShouldReturnError(t *testing.T) {
 	query := "SELECT id, name, created_at, updated_at FROM tags ORDER BY id"
 
 	mock.ExpectQuery(query).WillReturnError(errors.New(expectedErrorMessage))
-	repo := mysql.NewTagRepository(db)
+	repo := NewTagRepository(db)
 	actualTags, err := repo.Select()
 
 	assert.Nil(t, actualTags)
