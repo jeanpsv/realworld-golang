@@ -8,19 +8,19 @@ import (
 )
 
 type TagHandler struct {
-	service services.TagService
+	tags services.TagService
 }
 
-func NewTagHandler(router *mux.Router, s services.TagService) {
+func NewTagHandler(router *mux.Router, tagService services.TagService) {
 	handler := &TagHandler{
-		service: s,
+		tags: tagService,
 	}
 
 	router.HandleFunc("/api/tags", handler.listTags).Methods("GET")
 }
 
 func (h *TagHandler) listTags(w http.ResponseWriter, r *http.Request) {
-	tags, err := h.service.List()
+	tags, err := h.tags.List()
 	if err != nil {
 		http.Error(w, "The server encountered a problem and could not process your request", http.StatusInternalServerError)
 	}

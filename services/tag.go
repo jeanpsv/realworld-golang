@@ -7,17 +7,17 @@ type TagRepository interface {
 }
 
 type TagService struct {
-	repo TagRepository
+	tags TagRepository
 }
 
-func NewTagService(t TagRepository) TagService {
+func NewTagService(tagRepository TagRepository) TagService {
 	return TagService{
-		repo: t,
+		tags: tagRepository,
 	}
 }
 
 func (s *TagService) List() ([]*models.Tag, error) {
-	tags, err := s.repo.Select()
+	tags, err := s.tags.Select()
 	if err != nil {
 		return nil, err
 	}

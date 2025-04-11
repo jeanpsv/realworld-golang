@@ -13,9 +13,9 @@ type TagRepository struct {
 	conn *sql.DB
 }
 
-func NewTagRepository(c *sql.DB) services.TagRepository {
+func NewTagRepository(conn *sql.DB) services.TagRepository {
 	return &TagRepository{
-		conn: c,
+		conn: conn,
 	}
 }
 
