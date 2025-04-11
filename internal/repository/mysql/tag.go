@@ -9,17 +9,17 @@ import (
 	"github.com/jeanpsv/realworld-golang/services"
 )
 
-type TagRepository struct {
+type TagStorage struct {
 	conn *sql.DB
 }
 
 func NewTagRepository(conn *sql.DB) services.TagRepository {
-	return &TagRepository{
+	return &TagStorage{
 		conn: conn,
 	}
 }
 
-func (r *TagRepository) Select() ([]*models.Tag, error) {
+func (r *TagStorage) Select() ([]*models.Tag, error) {
 	query := `
 		SELECT id, name, created_at, updated_at
 		FROM tags
