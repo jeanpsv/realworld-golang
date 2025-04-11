@@ -15,6 +15,10 @@ down:
 run/api:
 	go run ./cmd/api
 
+## test: run app unit tests
+test:
+	go test ./...
+
 ## db/migration/create migration_name=$1: create a new database migration 
 db/migration/create:
 	migrate create -ext=.sql -dir=./migrations ${migration_name}
@@ -34,3 +38,7 @@ db/migration/down:
 ## db/migration/force version=$1: force specific migration version
 db/migration/force:
 	migrate -path=./migrations -database=mysql://realworld:realworld@/realworld_dev force ${version}
+
+## mock/generate: generate mocks
+mock/generate:
+	docker run -v "$PWD":/src -w /src vektra/mockery --all
