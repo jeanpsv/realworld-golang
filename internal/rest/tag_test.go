@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -13,17 +14,24 @@ import (
 )
 
 func TestListHandler(t *testing.T) {
-	expectedTags := []*models.Tag{
-		{
-			ID:        1,
-			Name:      "testing",
-			CreatedAt: time.Now(),
-			UpdatedAt: time.Now(),
-		},
+	tag1 := models.Tag{
+		ID:        1,
+		Name:      "testing",
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	}
 
+	tag2 := models.Tag{
+		ID:        2,
+		Name:      "golang",
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}
+
+	tags := []*models.Tag{&tag1, &tag2}
+
 	mockedTagService := mocks.NewTagUseCase(t)
-	mockedTagService.On("List").Return(expectedTags, nil)
+	mockedTagService.On("List").Return(tags, nil)
 
 	req, err := http.NewRequest("GET", "/api/tags", nil)
 	if err != nil {
@@ -36,5 +44,10 @@ func TestListHandler(t *testing.T) {
 	router.ServeHTTP(rr, req)
 
 	assert.Equal(t, http.StatusOK, rr.Code)
-	print(rr.Body.String())
+	var body = map[string][]string{}
+	err = json.Unmarshal(rr.Body.Bytes(), &body)
+	assert.Nil(t, err)
+	assert.NotNil(t, body["tags"])
+	expectedTags := []string{tag2.Name, tag2.Name}
+	assert.Exactly(t, expectedTags, body["tags"])
 }

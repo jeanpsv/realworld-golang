@@ -17,7 +17,7 @@ run/api:
 
 ## test: run app unit tests
 test:
-	go test ./...
+	go test -v ./...
 
 ## db/migration/create migration_name=$1: create a new database migration 
 db/migration/create:
