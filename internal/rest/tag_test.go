@@ -48,6 +48,6 @@ func TestListHandler(t *testing.T) {
 	err = json.Unmarshal(rr.Body.Bytes(), &body)
 	assert.Nil(t, err)
 	assert.NotNil(t, body["tags"])
-	expectedTags := []string{tag2.Name, tag2.Name}
+	expectedTags := []string{tag1.Name, tag2.Name}
 	assert.Exactly(t, expectedTags, body["tags"])
 }
