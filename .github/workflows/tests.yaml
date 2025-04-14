@@ -1,6 +1,9 @@
 name: Tests
 
 on:
+  push:
+    branches:
+      - "configure-ci"
   pull_request:
     types: [opened, synchronize]
 
