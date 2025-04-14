@@ -21,8 +21,10 @@ func NewTagHandler(router *mux.Router, tagService services.TagUseCase) {
 
 func (h *TagHandler) listTags(w http.ResponseWriter, r *http.Request) {
 	tags, err := h.tags.List()
+	internalServerErrorMessage := "The server encountered a problem and could not process your request"
 	if err != nil {
-		http.Error(w, "The server encountered a problem and could not process your request", http.StatusInternalServerError)
+		http.Error(w, internalServerErrorMessage, http.StatusInternalServerError)
+		return
 	}
 
 	tagNames := []string{}
@@ -32,6 +34,6 @@ func (h *TagHandler) listTags(w http.ResponseWriter, r *http.Request) {
 
 	err = WriteJSON(w, http.StatusOK, Envelope{"tags": tagNames}, nil)
 	if err != nil {
-		http.Error(w, "The server encountered a problem and could not process your request", http.StatusInternalServerError)
+		http.Error(w, internalServerErrorMessage, http.StatusInternalServerError)
 	}
 }
